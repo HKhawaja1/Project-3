@@ -1,89 +1,125 @@
 from random import randint
 
-board_size = 6
 
-def create_board():
-    board = []
-    for _ in range(board_size):
-        board.append(["O"] * board_size)
-    return board
+class BattleshipGame:
+    def __init__(self, board_size):
+        self.board_size = board_size
+        self.player_board = self.create_board()
+        self.computer_board = self.create_board()
+        self.player_ships = []
+        self.computer_ships = []
+        self.guessed_positions = set()  # Keep track of guessed positions
 
-def print_boards(player_board, computer_board):
-    print("\nYour Board:")
-    for row in player_board:
-        print(" ".join(row))
-    print("\nComputer's Board:")
-    for row in computer_board:
-        print(" ".join(row))
+    def create_board(self):
+        board = []
+        for _ in range(self.board_size):
+            board.append(["O"] * self.board_size)
+        return board
 
-def random_row(board):
-    return randint(0, len(board) - 1)
+    def place_ships(self, board, num_ships):
+        ships = []
+        for _ in range(num_ships):
+            ship_row = randint(0, self.board_size - 1)
+            ship_column = randint(0, self.board_size - 1)
+            while board[ship_row][ship_column] != "O":
+                ship_row = randint(0, self.board_size - 1)
+                ship_column = randint(0, self.board_size - 1)
+            board[ship_row][ship_column] = "S"
+            ships.append((ship_row, ship_column))
+        return ships
 
-def random_column(board):
-    return randint(0, len(board[0]) - 1)
+    def print_boards(self):
+        print("\nYour Board:")
+        for row in self.player_board:
+            print(" ".join(row))
+        print("\nComputer's Board:")
+        for row in self.computer_board:
+            print(" ".join(["X" if cell == "X" else "O" for cell in row]))
 
-def play_game():
-    print("Battleship Game")
+    def update_board(self, board, row, column, value):
+        board[row][column] = value
 
-    player_board = create_board()
-    computer_board = create_board()
+    def play_game(self):
+        print("Battleship Game")
 
-    player_ship_row = random_row(player_board)
-    player_ship_column = random_column(player_board)
+        self.player_ships = self.place_ships(self.player_board, 3)
+        self.computer_ships = self.place_ships(self.computer_board, 3)
 
-    computer_ship_row = random_row(computer_board)
-    computer_ship_column = random_column(computer_board)
+        while True:
+            self.print_boards()
 
-    print("Your Battleship Location: Row:", player_ship_row, "Column:", player_ship_column)
+            valid_input = False
+            while not valid_input:
+                player_guess_row = input("Guess Row (0-5): ")
+                player_guess_column = input("Guess Column (0-5): ")
 
-    while True:
-        print_boards(player_board, computer_board)
+                if player_guess_row.isdigit() and player_guess_column.isdigit():
+                    player_guess_row = int(player_guess_row)
+                    player_guess_column = int(player_guess_column)
 
-        valid_input = False
-        while not valid_input:
-            player_guess_row = input("Guess Row (0-5): ")
-            player_guess_column = input("Guess Column (0-5): ")
-
-            if player_guess_row.isdigit() and player_guess_column.isdigit():
-                player_guess_row = int(player_guess_row)
-                player_guess_column = int(player_guess_column)
-
-                if player_guess_row in range(board_size) and player_guess_column in range(board_size):
-                    valid_input = True
+                    if player_guess_row in range(
+                        self.board_size
+                    ) and player_guess_column in range(self.board_size):
+                        position = (player_guess_row, player_guess_column)
+                        if position not in self.guessed_positions:
+                            self.guessed_positions.add(position)
+                            valid_input = True
+                        else:
+                            print(
+                                "You have already guessed that position. Please enter a new one."
+                            )
+                    else:
+                        print(
+                            "Please enter a number between 0 and", self.board_size - 1
+                        )
                 else:
-                    print("Please enter a number between 0 and", board_size - 1)
+                    print("Please enter a number between 0 and 5")
+
+            if (player_guess_row, player_guess_column) in self.computer_ships:
+                print("\nYou hit the computer's battleship!")
+                self.update_board(
+                    self.computer_board, player_guess_row, player_guess_column, "X"
+                )
+                self.computer_ships.remove((player_guess_row, player_guess_column))
+                if len(self.computer_ships) == 0:
+                    print(
+                        "Congratulations! You sank all of the computer's battleships. You win!"
+                    )
+                    break
             else:
-                print("Please enter a number between 0 and 5")
+                if self.computer_board[player_guess_row][player_guess_column] == "X":
+                    print("Please enter a position that you haven't already guessed")
+                else:
 
-        if player_guess_row == computer_ship_row and player_guess_column == computer_ship_column:
-            print("You hit the computer's battleship!")
-            computer_board[player_guess_row][player_guess_column] = "X"
-            break
-        else:
-            if computer_board[player_guess_row][player_guess_column] == "X":
-                print("Please enter a position that you haven't already guessed")
+                    print("\nYou missed the computer's battleship!")
+                    self.update_board(
+                        self.computer_board, player_guess_row, player_guess_column, "X"
+                    )
+
+            computer_guess_row = randint(0, self.board_size - 1)
+            computer_guess_column = randint(0, self.board_size - 1)
+
+            if (computer_guess_row, computer_guess_column) in self.player_ships:
+                print("Oh no! Computer sunk one of your battleships!")
+                self.update_board(
+                    self.player_board, computer_guess_row, computer_guess_column, "X"
+                )
+                self.player_ships.remove((computer_guess_row, computer_guess_column))
+                if len(self.player_ships) == 0:
+                    print("All of your battleships have been sunk. You lose!")
+                    break
             else:
-                print("\nYour Turn:")
-                print("You missed the computer's battleship!")
-                computer_board[player_guess_row][player_guess_column] = "X"
+                if self.player_board[computer_guess_row][computer_guess_column] == "X":
+                    continue  # Computer already guessed this position, try again
+                else:
+                    print("Computer missed your battleship!")
+                    self.update_board(
+                        self.player_board,
+                        computer_guess_row,
+                        computer_guess_column,
+                        "X",
+                    )
 
-        print("\nComputer's Turn:")
 
-        computer_guess_row = random_row(player_board)
-        computer_guess_column = random_column(player_board)
-
-        if (
-            computer_guess_row == player_ship_row
-            and computer_guess_column == player_ship_column
-        ):
-            print("Oh no! Computer sunk your battleship!")
-            player_board[computer_guess_row][computer_guess_column] = "X"
-            break
-        else:
-            if player_board[computer_guess_row][computer_guess_column] == "X":
-                continue  # Computer already guessed this position, try again
-            else:
-                print("Computer missed your battleship!")
-                player_board[computer_guess_row][computer_guess_column] = "X"
-
-play_game()
+game = BattleshipGame(6)
+game.play_game()
