@@ -6,7 +6,7 @@ class BattleshipGame:
     def __init__(self):
         self.board_size = 6  # Default grid size
         self.player_board = []
-        self.computer_board = []
+        self.c_board = []
         self.player_ships = []
         self.computer_ships = []
         self.guessed_positions = set()
@@ -16,7 +16,8 @@ class BattleshipGame:
         # Prompts the user to enter the desired grid size
         while True:
             try:
-                size = int(input("Enter the grid size (minimum 5, maximum 20): "))
+                size = int(
+                    input("Enter the grid size (minimum 5, maximum 20): "))
                 if 5 <= size <= 20:
                     self.board_size = size
                     break
@@ -51,7 +52,7 @@ class BattleshipGame:
         for row in self.player_board:
             print(" ".join(row))
         print("\nComputer's Board:")
-        for row in self.computer_board:
+        for row in self.c_board:
             print(
                 " ".join(
                     [
@@ -70,9 +71,9 @@ class BattleshipGame:
 
         self.set_grid_size()
         self.player_board = self.create_board()
-        self.computer_board = self.create_board()
+        self.c_board = self.create_board()
         self.player_ships = self.place_ships(self.player_board, 3)
-        self.computer_ships = self.place_ships(self.computer_board, 3)
+        self.computer_ships = self.place_ships(self.c_board, 3)
 
         while True:
             self.print_boards()
@@ -80,86 +81,76 @@ class BattleshipGame:
             valid_input = False
             while not valid_input:
                 try:
-                    player_guess_row = int(
-                        input("Guess Row (0-{}): ".format(self.board_size - 1))
-                    )
-                    player_guess_column = int(
-                        input("Guess Column (0-{}): ".format(self.board_size - 1))
-                    )
+                    p_guess_row = int(
+                        input("Row (0-{}): ".format(self.board_size - 1)))
+                    p_guess_column = int(
+                        input("Column (0-{}): ".format(self.board_size - 1)))
 
-                    if player_guess_row in range(
-                        self.board_size
-                    ) and player_guess_column in range(self.board_size):
-                        position = (player_guess_row, player_guess_column)
+                    if p_guess_row in range(
+                            self.board_size) and p_guess_column in range(
+                            self.board_size):
+                        position = (p_guess_row, p_guess_column)
                         if position not in self.guessed_positions:
                             self.guessed_positions.add(position)
                             valid_input = True
                         else:
-                            print(
-                                "You have already guessed that position. Please enter a new one."
-                            )
+                            print("You have already guessed that position.")
                     else:
                         print(
                             "Please enter a number between 0 and {}".format(
-                                self.board_size - 1
-                            )
-                        )
+                                self.board_size - 1))
                 except ValueError:
                     print("Invalid input. Please enter a valid number.")
 
-            if (player_guess_row, player_guess_column) in self.computer_ships:
-                print(Fore.GREEN + "\nYou hit the computer's battleship!" + Fore.RESET)
+            if (p_guess_row, p_guess_column) in self.computer_ships:
+                print(
+                    Fore.GREEN +
+                    "\nYou hit the computer's battleship!" +
+                    Fore.RESET)
                 self.update_board(
-                    self.computer_board, player_guess_row, player_guess_column, "X"
-                )
-                self.computer_ships.remove((player_guess_row, player_guess_column))
+                    self.c_board, p_guess_row, p_guess_column, "X")
+                self.computer_ships.remove((p_guess_row, p_guess_column))
                 if len(self.computer_ships) == 0:
                     print(
-                        Fore.GREEN
-                        + "Congratulations! You sank all of the computer's battleships. You win!"
-                        + Fore.RESET
-                    )
+                        Fore.GREEN +
+                        "Congratulations! You won!" +
+                        Fore.RESET)
                     break
             else:
-                if self.computer_board[player_guess_row][player_guess_column] == "X":
-                    print("Please enter a position that you haven't already guessed")
+                if self.c_board[p_guess_row][p_guess_column] == "X":
+                    print("You have already guessed this position.")
                 else:
                     print("\nYou missed the computer's battleship!")
                     self.update_board(
-                        self.computer_board, player_guess_row, player_guess_column, "X"
-                    )
+                        self.c_board, p_guess_row, p_guess_column, "X")
 
-            computer_guess_row = randint(0, self.board_size - 1)
-            computer_guess_column = randint(0, self.board_size - 1)
+            c_guess_row = randint(0, self.board_size - 1)
+            c_guess_column = randint(0, self.board_size - 1)
 
-            if (computer_guess_row, computer_guess_column) in self.player_ships:
+            if (c_guess_row, c_guess_column) in self.player_ships:
                 print(
-                    Fore.RED
-                    + "Oh no! Computer sunk one of your battleships!"
-                    + Fore.RESET
-                )
+                    Fore.RED +
+                    "Oh no! Computer sunk one of your battleships!" +
+                    Fore.RESET)
                 self.update_board(
-                    self.player_board, computer_guess_row, computer_guess_column, "X"
-                )
-                self.player_ships.remove((computer_guess_row, computer_guess_column))
+                    self.player_board,
+                    c_guess_row,
+                    c_guess_column,
+                    "X")
+                self.player_ships.remove((c_guess_row, c_guess_column))
                 if len(self.player_ships) == 0:
                     print(
-                        Fore.RED
-                        + "All of your battleships have been sunk. You lose!"
-                        + Fore.RESET
-                    )
+                        Fore.RED +
+                        "All of your battleships have been sunk. You lose!" +
+                        Fore.RESET)
                     break
             else:
-                if self.player_board[computer_guess_row][computer_guess_column] == "X":
-                    continue  # Computer already guessed this position, try again
+                if self.player_board[c_guess_row][c_guess_column] == "X":
+                    continue  # Computer already guessed this, try again
                 else:
                     print("Computer missed your battleship!")
                     self.update_board(
-                        self.player_board,
-                        computer_guess_row,
-                        computer_guess_column,
-                        "X",
-                    )
+                        self.player_board, c_guess_row, c_guess_column, "X")
 
 
 game = BattleshipGame()
