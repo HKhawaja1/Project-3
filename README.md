@@ -52,29 +52,29 @@ The battleships game was deployed to Heroku. In order to deploy it there I built
 
 
 ## References
-https://copyassignment.com/battleship-game-code-in-python/
-https://coderspacket.com/battleship-game-in-python
-https://discuss.codecademy.com/t/excellent-battleship-game-written-in-python/430605
-https://pypi.org/project/colorama/
-https://www.pythonpool.com/python-colorama/
-https://www.geeksforgeeks.org/turtle-reset-function-in-python/
-https://www.w3schools.com/python/gloss_python_class_init.asp
-https://www.w3schools.com/python/python_booleans.asp
-https://www.w3schools.com/python/python_ref_exceptions.asp
-https://www.w3schools.com/python/python_operators.asp
-https://www.w3schools.com/python/python_classes.asp
-https://www.w3schools.com/python/python_while_loops.asp
-https://www.w3schools.com/python/python_for_loops.asp
-https://www.w3schools.com/python/python_try_except.asp
-https://www.w3schools.com/python/ref_func_len.asp
-https://www.w3schools.com/python/ref_keyword_continue.asp
-https://www.w3schools.com/python/ref_keyword_break.asp
-https://www.w3schools.com/python/ref_keyword_return.asp
-https://www.w3schools.com/python/python_arrays.asp
-https://www.w3schools.com/python/python_user_input.asp
-https://www.w3schools.com/python/ref_func_range.asp
-https://www.w3schools.com/python/ref_string_format.asp
-https://www.w3schools.com/python/ref_string_join.asp
+- https://copyassignment.com/battleship-game-code-in-python/
+- https://coderspacket.com/battleship-game-in-python
+- https://discuss.codecademy.com/t/excellent-battleship-game-written-in-python/430605
+- https://pypi.org/project/colorama/
+- https://www.pythonpool.com/python-colorama/
+- https://www.geeksforgeeks.org/turtle-reset-function-in-python/
+- https://www.w3schools.com/python/gloss_python_class_init.asp
+- https://www.w3schools.com/python/python_booleans.asp
+- https://www.w3schools.com/python/python_ref_exceptions.asp
+- https://www.w3schools.com/python/python_operators.asp
+- https://www.w3schools.com/python/python_classes.asp
+- https://www.w3schools.com/python/python_while_loops.asp
+- https://www.w3schools.com/python/python_for_loops.asp
+- https://www.w3schools.com/python/python_try_except.asp
+- https://www.w3schools.com/python/ref_func_len.asp
+- https://www.w3schools.com/python/ref_keyword_continue.asp
+- https://www.w3schools.com/python/ref_keyword_break.asp
+- https://www.w3schools.com/python/ref_keyword_return.asp
+- https://www.w3schools.com/python/python_arrays.asp
+- https://www.w3schools.com/python/python_user_input.asp
+- https://www.w3schools.com/python/ref_func_range.asp
+- https://www.w3schools.com/python/ref_string_format.asp
+- https://www.w3schools.com/python/ref_string_join.asp
 
 
 
